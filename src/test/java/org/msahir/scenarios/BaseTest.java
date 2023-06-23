@@ -17,14 +17,14 @@ public class BaseTest {
     protected PaymentsController paymentsController;
 
     protected void setup(int lockTimeout, int allowedRetries) {
-        final DemoSeatLockPlugin seatLockProvider = new DemoSeatLockPlugin(lockTimeout);
-        final BookingService bookingService = new BookingService(seatLockProvider);
+        final DemoSeatLockPlugin seatLockPlugin = new DemoSeatLockPlugin(lockTimeout);
+        final BookingService bookingService = new BookingService(seatLockPlugin);
         final MovieService movieService = new MovieService();
         final ShowService showService = new ShowService();
         final TheatreService theatreService = new TheatreService();
         final SeatAvailabilityService seatAvailabilityService
-                = new SeatAvailabilityService(bookingService, seatLockProvider);
-        final PaymentsService paymentsService = new PaymentsService(allowedRetries, seatLockProvider);
+                = new SeatAvailabilityService(bookingService, seatLockPlugin);
+        final PaymentsService paymentsService = new PaymentsService(allowedRetries, seatLockPlugin);
 
         bookingController = new BookingController(showService, bookingService, theatreService);
         showController = new ShowController(seatAvailabilityService, showService, theatreService, movieService);

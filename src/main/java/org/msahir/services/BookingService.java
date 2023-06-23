@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class BookingService {
 
     private final Map<String, Booking> showBookings;
-    private final SeatLockPlugin seatLockProvider;
+    private final SeatLockPlugin seatLockPlugin;
 
-    public BookingService(SeatLockPlugin seatLockProvider) {
-        this.seatLockProvider = seatLockProvider;
+    public BookingService(SeatLockPlugin seatLockPlugin) {
+        this.seatLockPlugin = seatLockPlugin;
         this.showBookings = new HashMap<>();
     }
 
@@ -31,11 +31,11 @@ public class BookingService {
 
     public List<Booking> getAllBookings(@NonNull final Show show) {
         List<Booking> response = new ArrayList<>();
-        for (Booking booking : showBookings.values()) {
+        showBookings.values().stream().forEach(booking -> {
             if (booking.getShow().equals(show)) {
                 response.add(booking);
             }
-        }
+        });
         return response;
     }
 
@@ -44,7 +44,7 @@ public class BookingService {
         if (isAnySeatAlreadyBooked(show, seats)) {
             throw new SeatPermanentlyUnavailableException();
         }
-        seatLockProvider.lockSeats(show, seats, userId);
+        seatLockPlugin.lockSeats(show, seats, userId);
         final String bookingId = UUID.randomUUID().toString();
         final Booking newBooking = new Booking(bookingId, show, userId, seats);
         showBookings.put(bookingId, newBooking);
@@ -65,7 +65,7 @@ public class BookingService {
             throw new BadRequestException();
         }
         booking.getSeatsBooked().stream()
-                .filter(seat -> !seatLockProvider.validateLock(booking.getShow(), seat, user))
+                .filter(seat -> !seatLockPlugin.validateLock(booking.getShow(), seat, user))
                 .findFirst()
                 .ifPresent(seat -> {
                     throw new BadRequestException();

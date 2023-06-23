@@ -12,11 +12,11 @@ public class PaymentsService {
 
     Map<Booking, Integer> bookingFailures;
     private final Integer allowedRetries;
-    private final SeatLockPlugin seatLockProvider;
+    private final SeatLockPlugin seatLockPlugin;
 
-    public PaymentsService(@NonNull final Integer allowedRetries, SeatLockPlugin seatLockProvider) {
+    public PaymentsService(@NonNull final Integer allowedRetries, SeatLockPlugin seatLockPlugin) {
         this.allowedRetries = allowedRetries;
-        this.seatLockProvider = seatLockProvider;
+        this.seatLockPlugin = seatLockPlugin;
         bookingFailures = new HashMap<>();
     }
 
@@ -31,7 +31,12 @@ public class PaymentsService {
         final Integer newFailuresCount = currentFailuresCount + 1;
         bookingFailures.put(booking, newFailuresCount);
         if (newFailuresCount > allowedRetries) {
-            seatLockProvider.unlockSeats(booking.getShow(), booking.getSeatsBooked(), booking.getUser());
+            seatLockPlugin.unlockSeats(booking.getShow(), booking.getSeatsBooked(), booking.getUser());
         }
+    }
+
+    public boolean processPaymentSuccess(@NonNull final Booking booking, @NonNull final String user) {
+        //TODO: Connect with Payment Service to perform the payment. For demo return true.
+        return true;
     }
 }

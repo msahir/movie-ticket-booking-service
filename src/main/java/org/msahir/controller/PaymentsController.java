@@ -1,5 +1,6 @@
 package org.msahir.controller;
 
+import org.msahir.model.Booking;
 import org.msahir.services.BookingService;
 import org.msahir.services.PaymentsService;
 import lombok.NonNull;
@@ -18,7 +19,9 @@ public class PaymentsController {
     }
 
     public void paymentSuccess(@NonNull final  String bookingId, @NonNull final String user) {
-        bookingService.confirmBooking(bookingService.getBooking(bookingId), user);
+        Booking booking = bookingService.getBooking(bookingId);
+        paymentsService.processPaymentSuccess(booking, user);
+        bookingService.confirmBooking(booking, user);
     }
 
 }

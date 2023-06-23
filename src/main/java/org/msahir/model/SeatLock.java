@@ -10,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 public class SeatLock {
+    
     private Seat seat;
     private Show show;
     private Integer timeoutInSeconds;

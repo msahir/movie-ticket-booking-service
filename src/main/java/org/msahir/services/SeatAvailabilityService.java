@@ -10,12 +10,12 @@ import java.util.List;
 
 public class SeatAvailabilityService {
     private final BookingService bookingService;
-    private final SeatLockPlugin seatLockProvider;
+    private final SeatLockPlugin seatLockPlugin;
 
     public SeatAvailabilityService(@NonNull final BookingService bookingService,
-                                   @NonNull final SeatLockPlugin seatLockProvider) {
+                                   @NonNull final SeatLockPlugin seatLockPlugin) {
         this.bookingService = bookingService;
-        this.seatLockProvider = seatLockProvider;
+        this.seatLockPlugin = seatLockPlugin;
     }
 
     public List<Seat> getAvailableSeats(@NonNull final Show show) {
@@ -29,7 +29,7 @@ public class SeatAvailabilityService {
 
     private List<Seat> getUnavailableSeats(@NonNull final Show show) {
         final List<Seat> unavailableSeats = bookingService.getBookedSeats(show);
-        unavailableSeats.addAll(seatLockProvider.getLockedSeats(show));
+        unavailableSeats.addAll(seatLockPlugin.getLockedSeats(show));
         return unavailableSeats;
     }
 

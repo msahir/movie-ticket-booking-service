@@ -26,18 +26,18 @@ public class Booking {
     }
 
     public boolean isConfirmed() {
-        return this.bookingStatus == BookingStatus.Confirmed;
+        return BookingStatus.Confirmed.equals(this.bookingStatus);
     }
 
     public void confirmBooking() {
-        if (this.bookingStatus != BookingStatus.Created) {
+        if (!BookingStatus.Created.equals(this.bookingStatus)) {
             throw new InvalidStateException();
         }
         this.bookingStatus = BookingStatus.Confirmed;
     }
 
     public void expireBooking() {
-        if (this.bookingStatus != BookingStatus.Created) {
+        if (!BookingStatus.Created.equals(this.bookingStatus)) {
             throw new InvalidStateException();
         }
         this.bookingStatus = BookingStatus.Cancel;

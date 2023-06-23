@@ -47,9 +47,7 @@ public class ShowService {
     }
 
     private boolean checkIfShowCreationAllowed(final Audi audi, final Date startTime, final Integer durationInSeconds) {
-        // TODO: Implement this. This method will return whether the audi is free at a particular time for
-        // specific duration. This function will be helpful in checking whether the show can be scheduled in that slot
-        // or not.
+        // TODO: For demo purpose, return always true.
         return true;
     }
 }
